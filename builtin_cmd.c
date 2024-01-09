@@ -7,9 +7,9 @@
  * Return: Nothing
  */
 
-void handle_exit(void)
+void handle_exit(int exit_stat)
 {
-	exit(EXIT_SUCCESS);
+	exit(exit_stat);
 }
 
 /**
