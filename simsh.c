@@ -14,6 +14,7 @@ int main(int ac, char **av, char **env)
 	char *input_line = NULL;
 	char **args;
 	int line_num = 1, statcode = 0;
+	(void)ac;
 
 	signal(SIGINT,  SIG_IGN);
 
