@@ -4,49 +4,50 @@
  * read_and_tokenizeInput - A function that reads the input of the user
  * and tokenize it.
  * @buffer: the temporal container
- * @ac: argument vector
  *
  * Return: Nothing
  */
 
-char **read_and_tokenizeInput(char *buffer, int ac)
+char **read_and_tokenizeInput(char *buffer)
 {
-	size_t n = 0, ch_read, strnum = 0, token_len;
-	char *token;
-	char **args = malloc(sizeof(char *) * (ac + 1));
-
-	if (args == NULL)
-	{
-		perror("Error: malloc");
-		exit(EXIT_FAILURE);
-	}
+	ssize_t ch_read;
+	int i = 0, count = 0;
+	char *token = NULL, *buffer_cpy, *buffer_cpy2;
+	char **args = NULL;
+	size_t n = 0;
 
 	ch_read = getline(&buffer, &n, stdin);
 	if (ch_read == -1)
 	{
 		free(buffer);
-		free(args);
-		exit(EXIT_FAILURE);
+		exit(127);
 	}
-	token_len = strlen(buffer);
-	if (token_len > 0 && buffer[token_len - 1] == '\n')
-		buffer[token_len - 1] = '\0';
+	buffer_cpy = strdup(buffer);
 
-	token = strtok(buffer, " ");
+	token = strtok(buffer_cpy, DELIM);
 	while (token)
 	{
-		args[strnum] = strdup(token);
-		if (!args[strnum])
-		{
-			perror("Error: strdup");
-			free(buffer);
-			free_tokens(args, strnum);
-			exit(EXIT_FAILURE);
-		}
-		token = strtok(NULL, " ");
-		strnum++;
+		count++;
+		token = strtok(NULL, DELIM);
 	}
-	args[strnum] = NULL;
+	free(buffer_cpy);
+	/* didn't put the count + 1 in brackets */
+	args = malloc(sizeof(char *) * (count + 1));
+	if (args == NULL)
+	{
+		free(buffer);
+		exit(127);
+	}
+	buffer_cpy2 = strdup(buffer);
+	token = strtok(buffer_cpy2, DELIM);
+	while (token)
+	{
+		args[i] = strdup(token);
+		token = strtok(NULL, DELIM);
+		i++;
+	}
+	free(buffer_cpy2);
+	args[i] = NULL;
 	free(buffer);
 	return (args);
 }
@@ -54,16 +55,15 @@ char **read_and_tokenizeInput(char *buffer, int ac)
 /**
  * free_tokens - A function that frees the tokens
  * @args: the arguments
- * @strnum: the number of tokens
  *
  * Return: NOthing
  */
 
-void free_tokens(char **args, size_t strnum)
+void free_tokens(char **args)
 {
-	size_t i;
+	int i;
 
-	for (i = 0; i < strnum; i++)
+	for (i = 0; args[i] != NULL; i++)
 	{
 		free(args[i]);
 	}
@@ -74,13 +74,27 @@ void free_tokens(char **args, size_t strnum)
  * execute_cmd - A function that execute a command parse to it.
  * @av: argument vector
  * @args: arguments
+ * @env: the environment variable
+ * @line_num: the number of instance executed
+ * @statcode: error value
  *
  * Return: Nothing
  */
 
-void execute_cmd(char **args, char **av)
+void execute_cmd(char **args, char **av, char **env, int line_num,
+		 int *statcode)
 {
 	int wstat, execval;
+	char *fullPath = getAbsPath(args[0]);
+
+	if (!fullPath)
+	{
+		fprintf(stderr, "%s :%d %s: not found\n", av[0], line_num, args[0]);
+		*statcode = 127;
+		free_tokens(args);
+		return;
+	}
+
 	pid_t child_id = fork();
 
 	if (child_id == -1)
@@ -91,17 +105,23 @@ void execute_cmd(char **args, char **av)
 
 	if (child_id == 0)
 	{
-		execval = execve(args[0], args, NULL);
+		execval = execve(fullPath, args, env);
 		if (execval == -1)
 		{
-			write(2, av[0], strlen(av[0]));
-			write(2, ": 1: ", 5);
-			write(2, args[1], strlen(args[1]));
-			write(2, ": not found\n", 12);
-			exit(EXIT_FAILURE);
+			fprintf(stderr, "%s :%d %s: not found\n", av[0], line_num, args[0]);
+			free_tokens(args);
+			free(fullPath);
+			exit(*statcode);
 		}
 	}
 	else
+	{
 		wait(&wstat);
+		if (!WIFEXITED(wstat))
+			*statcode = 127;
+		else
+			*statcode = WEXITSTATUS(wstat);
 
+		free(fullPath);
+	}
 }
