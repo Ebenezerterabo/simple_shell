@@ -86,6 +86,7 @@ void execute_cmd(char **args, char **av, char **env, int line_num,
 {
 	int wstat, execval;
 	char *fullPath = getAbsPath(args[0]);
+	pid_t child_id;
 
 	if (!fullPath)
 	{
@@ -94,8 +95,7 @@ void execute_cmd(char **args, char **av, char **env, int line_num,
 		return;
 	}
 
-	pid_t child_id = fork();
-
+	child_id = fork();
 	if (child_id == -1)
 	{
 		perror("Error: child_pid not created");
