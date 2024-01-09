@@ -26,8 +26,8 @@ int main(int ac, char **av, char **env)
 		{
 			if (strcmp(args[0], "exit") == 0)
 			{
-				handle_exit();
 				free_tokens(args);
+				handle_exit();
 			}
 
 			statcode = 0;
