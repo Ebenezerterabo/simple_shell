@@ -11,5 +11,6 @@ void print_prompt(void)
 {
 	char *prompt = "simsh$ ";
 
-	write(STDOUT_FILENO, prompt, strlen(prompt));
+	if (isatty(STDIN_FILENO))
+		write(STDOUT_FILENO, prompt, strlen(prompt));
 }
