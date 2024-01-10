@@ -90,10 +90,11 @@ void execute_cmd(char **args, char **av, char **env, int line_num,
 	int wstat, execval;
 	char *fullPath = getAbsPath(args[0]);
 	pid_t child_id;
+	(void)line_num;
 
 	if (!fullPath)
 	{
-		fprintf(stderr, "%s :%d %s: not found\n", av[0], line_num, args[0]);
+		fprintf(stderr, "%s: No such file or directory\n", av[0]);
 		*statcode = 127;
 		return;
 	}
@@ -110,7 +111,7 @@ void execute_cmd(char **args, char **av, char **env, int line_num,
 		execval = execve(fullPath, args, env);
 		if (execval == -1)
 		{
-			fprintf(stderr, "%s :%d %s: not found\n", av[0], line_num, args[0]);
+			fprintf(stderr, "%s: No such file or directory\n", av[0]);
 			free_tokens(args);
 			free(fullPath);
 			exit(127);
