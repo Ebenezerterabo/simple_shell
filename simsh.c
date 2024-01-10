@@ -8,7 +8,7 @@
  * Return: Always 0 on (Success)
  */
 
-int main(__attribute__((unused)) int ac, char **av)
+int main(__attribute__((unused)) int ac, char **av, char **env)
 {
 	char *input_line = NULL;
 	char **args;
@@ -31,7 +31,7 @@ int main(__attribute__((unused)) int ac, char **av)
 			}
 
 			statcode = 0;
-			execute_cmd(args, av, line_num, &statcode);
+			execute_cmd(args, av, env, line_num, &statcode);
 		}
 		statcode = 127;
 

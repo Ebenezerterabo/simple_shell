@@ -15,7 +15,8 @@
 /* Function Prototypes */
 void print_prompt(void);
 char **read_and_tokenizeInput(char *buffer);
-void execute_cmd(char **args, char **av, int line_num, int *statcode);
+void execute_cmd(char **args, char **av, char **env, int line_num,
+		 int *statcode);
 void free_tokens(char **args);
 char *getAbsPath(char *filename);
 char *getFullPath(char *filename, char *pathName);
