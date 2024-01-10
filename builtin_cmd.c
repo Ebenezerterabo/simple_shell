@@ -3,13 +3,13 @@
 /**
  * handle_exit - A function that exit or terminate the process
  * of the shell
- * @exit_stat: the exit status of the program
+ * @statcode: the exit status of the program
  *
  * Return: Nothing
  */
 
-void handle_exit(int exit_stat)
+void handle_exit(int *statcode)
 {
-	exit(exit_stat);
+	exit(*statcode);
 }
 

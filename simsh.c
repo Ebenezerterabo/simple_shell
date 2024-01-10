@@ -4,6 +4,7 @@
  * main - Entry point of our program
  * @ac: argument count
  * @av: argument vector
+ * @env: the environment variable
  *
  * Return: Always 0 on (Success)
  */
@@ -12,7 +13,7 @@ int main(__attribute__((unused)) int ac, char **av, char **env)
 {
 	char *input_line = NULL;
 	char **args;
-	int line_num = 1, statcode = 0, exit_stat;
+	int line_num = 1, statcode = 0; /*exit_stat;*/
 
 	signal(SIGINT,  SIG_IGN);
 
@@ -25,9 +26,9 @@ int main(__attribute__((unused)) int ac, char **av, char **env)
 		{
 			if (strcmp(args[0], "exit") == 0)
 			{
-				exit_stat = (args[1] != NULL) ? atoi(args[1]) : 0;
+				/*exit_stat = (args[1] != NULL) ? atoi(args[1]) : 0;*/
 				free_tokens(args);
-				handle_exit(exit_stat);
+				handle_exit(&statcode);
 			}
 
 			statcode = 0;
