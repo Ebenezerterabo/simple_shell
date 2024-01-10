@@ -113,7 +113,7 @@ void execute_cmd(char **args, char **av, char **env, int line_num,
 			fprintf(stderr, "%s :%d %s: not found\n", av[0], line_num, args[0]);
 			free_tokens(args);
 			free(fullPath);
-			exit(*statcode);
+			exit(127);
 		}
 	}
 	else
