@@ -36,7 +36,7 @@ char **read_and_tokenizeInput(char *buffer)
 	if (args == NULL)
 	{
 		free(buffer);
-		exit(127);
+		exit(EXIT_FAILURE);
 	}
 	buffer_cpy2 = strdup(buffer);
 	token = strtok(buffer_cpy2, DELIM);
@@ -62,6 +62,9 @@ char **read_and_tokenizeInput(char *buffer)
 void free_tokens(char **args)
 {
 	int i;
+
+	if (args == NULL)
+		return;
 
 	for (i = 0; args[i] != NULL; i++)
 	{
