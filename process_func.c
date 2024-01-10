@@ -84,8 +84,7 @@ void free_tokens(char **args)
  * Return: Nothing
  */
 
-void execute_cmd(char **args, char **av, char **env, int line_num,
-		 int *statcode)
+void execute_cmd(char **args, char **av, int line_num, int *statcode)
 {
 	int wstat, execval;
 	char *fullPath = getAbsPath(args[0]);
@@ -108,7 +107,7 @@ void execute_cmd(char **args, char **av, char **env, int line_num,
 
 	if (child_id == 0)
 	{
-		execval = execve(fullPath, args, env);
+		execval = execve(fullPath, args, NULL);
 		if (execval == -1)
 		{
 			fprintf(stderr, "%s: No such file or directory\n", av[0]);
