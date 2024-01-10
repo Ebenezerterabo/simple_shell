@@ -20,7 +20,7 @@ char **read_and_tokenizeInput(char *buffer)
 	if (ch_read == -1)
 	{
 		free(buffer);
-		exit(127);
+		exit(EXIT_SUCCESS);
 	}
 	buffer_cpy = strdup(buffer);
 
