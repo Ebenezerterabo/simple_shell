@@ -21,6 +21,6 @@ void free_tokens(char **args);
 char *getAbsPath(char *filename);
 char *getFullPath(char *filename, char *pathName);
 int checkForwardSlash(char *filename);
-void handle_exit(int *statcode);
+int handle_exit(char **args, int *exit_stat);
 
 #endif /* SIMSH_H */
