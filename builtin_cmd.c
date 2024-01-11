@@ -28,3 +28,25 @@ int handle_exit(char **args, int *exit_stat)
 	}
 }
 
+/**
+ * print_environ - A function that prints the environment variable
+ * of a shell
+ * @env: the environment variable
+ *
+ * Return: Nothing
+ */
+
+void print_environ(char **env)
+{
+	int i = 0;
+
+	if (env == NULL || *env == NULL)
+		return;
+
+	while (env[i])
+	{
+		write(STDOUT_FILENO, env[i], strlen(env[i]));
+		write(STDOUT_FILENO, "\n", 1);
+		i++;
+	}
+}

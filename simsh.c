@@ -30,9 +30,15 @@ int main(__attribute__((unused)) int ac, char **av, char **env)
 				free_tokens(args);
 				exit(exit_stat);
 			}
+			else if (strcmp(args[0], "env") == 0)
+			{
+				print_environ(env);
+				free_tokens(args);
+				continue;
+			}
 
 			statcode = 0;
-			execute_cmd(args, av, env, line_num, &statcode);
+			execute_cmd(args, av, line_num, &statcode);
 		}
 		statcode = 127;
 

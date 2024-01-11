@@ -63,9 +63,6 @@ void free_tokens(char **args)
 {
 	int i;
 
-	if (args == NULL)
-		return;
-
 	for (i = 0; args[i] != NULL; i++)
 	{
 		free(args[i]);
@@ -77,15 +74,13 @@ void free_tokens(char **args)
  * execute_cmd - A function that execute a command parse to it.
  * @av: argument vector
  * @args: arguments
- * @env: the environment variable
  * @line_num: the number of instance executed
  * @statcode: error value
  *
  * Return: Nothing
  */
 
-void execute_cmd(char **args, char **av, char **env, int line_num,
-		 int *statcode)
+void execute_cmd(char **args, char **av, int line_num, int *statcode)
 {
 	int wstat, execval;
 	char *fullPath = getAbsPath(args[0]);
@@ -107,7 +102,7 @@ void execute_cmd(char **args, char **av, char **env, int line_num,
 
 	if (child_id == 0)
 	{
-		execval = execve(fullPath, args, env);
+		execval = execve(fullPath, args, NULL);
 		if (execval == -1)
 		{
 			fprintf(stderr, "%s: %d: %s: not found\n", av[0], line_num, args[0]);
