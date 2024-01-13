@@ -22,6 +22,7 @@ char **read_and_tokenizeInput(char *buffer)
 		free(buffer);
 		exit(EXIT_SUCCESS);
 	}
+	handle_comment(buffer);
 	buffer_cpy = strdup(buffer);
 
 	token = strtok(buffer_cpy, DELIM);
@@ -31,7 +32,6 @@ char **read_and_tokenizeInput(char *buffer)
 		token = strtok(NULL, DELIM);
 	}
 	free(buffer_cpy);
-	/* didn't put the count + 1 in brackets */
 	args = malloc(sizeof(char *) * (count + 1));
 	if (args == NULL)
 	{

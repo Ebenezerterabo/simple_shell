@@ -50,3 +50,19 @@ void print_environ(char **env)
 		i++;
 	}
 }
+
+/**
+ * handle_comment - A function that handles comment in the
+ * argument
+ * @buffer: the temporal container
+ *
+ * Return: Nothing
+ */
+
+void handle_comment(char *buffer)
+{
+	char *comment = strchr(buffer, '#');
+
+	if (comment)
+		*comment = '\0';
+}
