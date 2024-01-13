@@ -20,7 +20,6 @@ int main(__attribute__((unused)) int ac, char **av, char **env)
 	while (true)
 	{
 		print_prompt();
-
 		args = read_and_tokenizeInput(input_line);
 		if (args && args[0])
 		{
@@ -36,12 +35,16 @@ int main(__attribute__((unused)) int ac, char **av, char **env)
 				free_tokens(args);
 				continue;
 			}
-
+			else if (strcmp(args[0], "cd") == 0)
+			{
+				handle_cd(args);
+				free_tokens(args);
+				continue;
+			}
 			statcode = 0;
 			execute_cmd(args, av, line_num, &statcode);
 		}
 		statcode = 127;
-
 		line_num++;
 		free_tokens(args);
 	}

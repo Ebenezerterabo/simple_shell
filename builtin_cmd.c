@@ -66,3 +66,40 @@ void handle_comment(char *buffer)
 	if (comment)
 		*comment = '\0';
 }
+
+/**
+ * handle_cd - A command to handle the buit in cd
+ * @args: the argument
+ *
+ * Return: Nothing
+ */
+
+void handle_cd(char **args)
+{
+	const char *home = getenv("HOME");
+	const char *prev = getenv("OLDPWD");
+	char current[4096];
+
+	if (!args[1] || strcmp(args[1], "~") == 0)
+	{
+		if (chdir(home ? home : ".") != 0)
+			perror("Error: cd failed");
+	}
+	else if (strcmp(args[1], "-") == 0)
+	{
+		if (prev)
+			if (chdir(prev) != 0)
+				perror("Error: cd failed");
+	}
+	else
+		if (chdir(args[1]) != 0)
+			perror("Error: cd failed");
+
+	if (getcwd(current, sizeof(current)))
+	{
+		setenv("OLDPWD", getenv("PWD"), 1);
+		setenv("PWD", current, 1);
+	}
+	else
+		perror("Error: updating pwd");
+}

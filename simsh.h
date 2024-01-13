@@ -23,4 +23,5 @@ int checkForwardSlash(char *filename);
 int handle_exit(char **args, int *exit_stat);
 void print_environ(char **env);
 void handle_comment(char *buffer);
+void handle_cd(char **args);
 #endif /* SIMSH_H */
